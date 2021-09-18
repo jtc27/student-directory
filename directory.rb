@@ -38,9 +38,14 @@ def print_header
 end
 
 def print(students)
+  i = 0
+  until i == students.length
   students.each_with_index do |student_el, index|
-    puts "#{index + 1}. #{student_el[:name]} (#{student_el[:cohort]} cohort)"
+      puts "#{index + 1}. #{student_el[:name]} (#{student_el[:cohort]} cohort)"
+      i = i + 1
+    end
   end
+
 end
 
 def print_footer(students)
