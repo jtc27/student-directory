@@ -1,8 +1,20 @@
 
 @students = [] # empty array accessible to all methods (global var)
 
-def load_students_list
-  file = File.open("students.csv", "r") # opens file for reading
+def try_load_students
+  filename = ARGV.first # first argument from command line
+  return if filename.nil? # exits method if first argument is not given
+  if File.exist?(filename)
+    load_students_list(filename)
+    puts "Loaded #{@students.count} from {filename}"
+  else
+    puts "Sorry, #{filename} does not exist"
+    exit
+  end
+end
+
+def load_students_list(filename = "students.csv")
+  file = File.open(filename, "r") # opens file for reading
   file.readlines.each do |line|
     name, cohort = line.chomp.split(", ") # split at comma, makes array with 2 elements, var name/cohort
     @students << {name: name, cohort: cohort.to_sym} # makes new hash, adds to @students
@@ -24,7 +36,7 @@ end
 def interactive_menu
   loop do
   print_menu
-  process(gets.chomp)
+  process(STDIN.gets.chomp)
   end
 end
 
@@ -48,9 +60,9 @@ def input_students
 
   @students = []
   # get the first name
-  name= gets.strip # alternate to chomp, getting rid of last return character 
+  name= STDIN.gets.strip # alternate to chomp, getting rid of last return character 
   puts "Enter the cohort" 
-  cohort = gets.chomp
+  cohort = STDIN.gets.chomp
 
   # while the name is not empty, repeat this code
   while !name.empty? do
@@ -70,14 +82,14 @@ def input_students
       @students << {name: name, cohort: cohort, hobbies: hobbies}
       if @students.count == 1
         puts "Now we have #{@students.count} student"
-        name = gets.chomp  #get another name from user
+        name = STDIN.gets.chomp  #get another name from user
         puts "Enter the cohort" 
-        cohort = gets.chomp 
+        cohort = STDIN.gets.chomp 
       else
         puts "Now we have #{@students.count} students"
-        name = gets.chomp  #get another name from user
+        name = STDIN.gets.chomp  #get another name from user
         puts "Enter the cohort" 
-        cohort = gets.chomp 
+        cohort = STDIN.gets.chomp 
       end
  
   end
@@ -118,4 +130,5 @@ def process(selection)
   end
 end
 
+try_load_students
 interactive_menu
