@@ -1,23 +1,28 @@
-class String
-  def initial # Ruby's open classes, allows initial method on any string
-    self[0,1]
+
+@students = [] # empty array accessible to all methods (global var)
+
+def save_students_list
+  file = File.open("students.csv", "w") # opens file for writing
+
+  @students.each do |student| #iterates array of students
+    student_data = [student[:name], student[:cohort]] # every cycle creates new array
+    csv_line = student_data.join(", ") # removes array brackets
+    file.puts csv_line # writes to the file, not screen
   end
+  file.close
 end
 
-@students = []
-
 def interactive_menu
-  
   loop do
   print_menu
   process(gets.chomp)
- 
   end
 end
 
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the list to students.csv"
   puts "9. Exit" # 9 because we'll be adding more items
 end
 
@@ -40,13 +45,7 @@ def input_students
   # while the name is not empty, repeat this code
   while !name.empty? do
     # add the student hash to the array
-    if name.length > 11
-      puts "Enter a name shorter than 12 characters"
-      name = gets.chomp
-      puts "Enter the cohort" 
-      cohort = gets.chomp 
-    elsif name.initial == "a" || name.initial == "A"
-
+   
       case rand(1..4)
       when 1
         hobbies = "swimming"
@@ -70,13 +69,7 @@ def input_students
         puts "Enter the cohort" 
         cohort = gets.chomp 
       end
-    else
-      puts "Enter a name with the letter 'A'"
-      name = gets.chomp
-      puts "Enter the cohort" 
-      cohort = gets.chomp 
-    end
-
+ 
   end
 
 end
@@ -104,6 +97,8 @@ def process(selection)
       input_students
     when "2"
       show_students
+    when "3"
+      save_students_list
     when "9"
       exit
     else
