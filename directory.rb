@@ -1,6 +1,15 @@
 
 @students = [] # empty array accessible to all methods (global var)
 
+def load_students_list
+  file = File.open("students.csv", "r") # opens file for reading
+  file.readlines.each do |line|
+    name, cohort = line.chomp.split(", ") # split at comma, makes array with 2 elements, var name/cohort
+    @students << {name: name, cohort: cohort.to_sym} # makes new hash, adds to @students
+  end
+  file.close
+end
+
 def save_students_list
   file = File.open("students.csv", "w") # opens file for writing
 
@@ -23,6 +32,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
+  puts "4. Load the list to students.csv"
   puts "9. Exit" # 9 because we'll be adding more items
 end
 
@@ -99,6 +109,8 @@ def process(selection)
       show_students
     when "3"
       save_students_list
+    when "4"
+      load_students_list
     when "9"
       exit
     else
