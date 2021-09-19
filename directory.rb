@@ -4,12 +4,34 @@ class String
   end
 end
 
+@students = []
+
+def interactive_menu
+  
+  loop do
+  print_menu
+  process(gets.chomp)
+ 
+  end
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit" # 9 because we'll be adding more items
+end
+
+def show_students
+  print_header
+  print_students_list # array goes into def print
+  print_footer # array goes into def print_footer 
+end
 
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice" # empty name returns final array
-  # create empty array
-  students = []
+
+  @students = []
   # get the first name
   name= gets.strip # alternate to chomp, getting rid of last return character 
   puts "Enter the cohort" 
@@ -36,14 +58,14 @@ def input_students
         hobbies = "world domination"
       end
 
-      students << {name: name, cohort: cohort, hobbies: hobbies}
-      if students.count == 1
-        puts "Now we have #{students.count} student"
+      @students << {name: name, cohort: cohort, hobbies: hobbies}
+      if @students.count == 1
+        puts "Now we have #{@students.count} student"
         name = gets.chomp  #get another name from user
         puts "Enter the cohort" 
         cohort = gets.chomp 
       else
-        puts "Now we have #{students.count} students"
+        puts "Now we have #{@students.count} students"
         name = gets.chomp  #get another name from user
         puts "Enter the cohort" 
         cohort = gets.chomp 
@@ -56,8 +78,7 @@ def input_students
     end
 
   end
-  # returns the final array of students
-  students
+
 end
 
 def print_header
@@ -65,20 +86,29 @@ def print_header
   puts "---------------".center(100)
 end
 
-def print(students)
-    students.map { |s| s[:cohort] }.uniq.each { |c| puts "#{c} cohort students are #{students.find_all { |s| s[:cohort] == c }.map { |s| s[:name] }.join(', ')}".center(100) }
+def print_students_list
+    @students.map { |s| s[:cohort] }.uniq.each { |c| puts "#{c} cohort students are #{@students.find_all { |s| s[:cohort] == c }.map { |s| s[:name] }.join(', ')}".center(100) }
 end
 
-def print_footer(students)
-  if students.length == 0
+def print_footer
+  if @students.length == 0
     puts "There are no students in the Academy".center(100)
   else
-    puts "Overall, we have #{students.count} great students".center(100)
+    puts "Overall, we have #{@students.count} great students".center(100)
   end
 end
 
-# now let's call the methods
-students = input_students # gets students from usersf
-print_header
-print(students)# array goes into def print
-print_footer(students) # array goes into def print_footerhjlk
+def process(selection)
+  case selection
+    when "1"
+      input_students
+    when "2"
+      show_students
+    when "9"
+      exit
+    else
+      puts "I don't know what you mean, try again"
+  end
+end
+
+interactive_menu
